@@ -1,0 +1,3 @@
+[submodule "SR2Tools"]
+	path = SR2Tools
+	url = https://github.com/Spreit/SR2Tools
