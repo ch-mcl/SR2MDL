@@ -1,11 +1,11 @@
-name: Create "SR2MDL ZIP"
+name: SR2MDL Release
 on: [push]
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: action/checkou@master
-    - name: Archive Release
+    - uses: actions/checkout@master
+    - name: Create "SR2MDL ZIP"
       uses: thedoctor0/zip-release@0.7.5
       with:
         type: 'zip'
