@@ -1,3 +1,3 @@
-[submodule "SR2Tools"]
-	path = SR2Tools
-	url = https://github.com/Spreit/SR2Tools
+[submodule "SR2MDL/SR2Tools"]
+	path = SR2MDL/SR2Tools
+	url = https://github.com/Spreit/SR2Tools.git
