@@ -5,9 +5,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@master
+      with:
+        submodules: true
     - name: Create "SR2MDL ZIP"
       uses: thedoctor0/zip-release@0.7.5
       with:
         type: 'zip'
         filename: 'SR2MDL.zip'
-        exclusions: '*.git* .gitignore .gitmodules readme.md /SR2Tools/Documentation /SR2Tools/GUIbackend SR2Tools/Changelog.txt SR2Tools/GUI_Run.py SR2Tools/README.md SR2Tools/SARCextractor.py SR2Tools/batchBINDATAconversion.py SR2Tools/bin_files_tool.py SR2Tools/bmp_handler.py SR2Tools/bmp_png_conversion.py SR2Tools/color_conversion.py SR2Tools/exe_dll_patcher.py SR2Tools/texture_classes.py SR2Tools/texture_tool.py SR2Tools/unyakuza.py'
+        exclusions: '*.git* /.github .gitignore .gitmodules readme.md /SR2Tools/Documentation /SR2Tools/GUIbackend SR2Tools/Changelog.txt SR2Tools/GUI_Run.py SR2Tools/README.md SR2Tools/SARCextractor.py SR2Tools/batchBINDATAconversion.py SR2Tools/bin_files_tool.py SR2Tools/bmp_handler.py SR2Tools/bmp_png_conversion.py SR2Tools/color_conversion.py SR2Tools/exe_dll_patcher.py SR2Tools/texture_classes.py SR2Tools/texture_tool.py SR2Tools/unyakuza.py'
+    - name: Upload
+      uses: actions/upload-artifact@v4
+      with:
+        name: SR2MDL
+        path: artifact
