@@ -12,10 +12,9 @@ jobs:
       with:
         type: 'zip'
         filename: 'SR2MDL.zip'
-        directory: blender_addon
         exclusions: '*.git* .readme.md /SR2MDL/SR2Tools/Documentation* /SR2MDL/SR2Tools/GUIbackend* SR2MDL/SR2Tools/Changelog.txt SR2MDL/SR2Tools/GUI_Run.py SR2MDL/SR2Tools/README.md SR2MDL/SR2Tools/SARCextractor.py SR2MDL/SR2Tools/batchBINDATAconversion.py SR2MDL/SR2Tools/bin_files_tool.py SR2MDL/SR2Tools/bmp_handler.py SR2MDL/SR2Tools/bmp_png_conversion.py SR2MDL/SR2Tools/color_conversion.py SR2MDL/SR2Tools/exe_dll_patcher.py SR2MDL/SR2Tools/texture_classes.py SR2MDL/SR2Tools/texture_tool.py SR2MDL/SR2Tools/unyakuza.py'
     - name: Upload
       uses: actions/upload-artifact@v4
       with:
         name: SR2MDL
-        path: blender_addon
+        path: .
