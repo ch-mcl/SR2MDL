@@ -87,9 +87,6 @@ class SR2MDLSidebarPanel(bpy.types.Panel):
 
         layout.operator("sr2mdl.load", text="Load")
 
-        row = layout.row()
-        row.label(text="Don't forget to triangulate faces (CTRL + T)!")
-
         layout.prop(my_props, "path_to_output", text="Output folder")
         layout.operator("sr2mdl.save", text="Save")
 
