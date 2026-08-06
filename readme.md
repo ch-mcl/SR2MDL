@@ -41,16 +41,17 @@ writes them back. The six floats of a material are still unidentified.
 - Keep the section order a mesh had in the file. Export always writes
   Material, Vertex, Face, while some files have Vertex first
 
-Import picks up the texture file sitting next to a model under the same name
-(tree_a.mdl and tree_a.txr) and wires each texture into the material of the
-mesh with the same index. Car models name their textures differently and are
-not covered yet.
+Import reads textures too. A node's transform holds a "Texture Index" at 0x0C,
+-1 when the mesh is drawn untextured, otherwise an index into the textures the
+model uses. A Track model keeps those in a file named after it (tree_a.mdl and
+tree_a.txr); a car indexes into the shared files of its folder, where 0 is
+body, 1 the tyre and 2 the windows, whose texture lives elsewhere.
 
     Textures
-- Work out how a car model picks its body.*.tex and *_tire.tex files
+- Find where the window texture of a car lives
 - Read level embedded textures
-- Work out whether a mesh really does just take the texture at its own index,
-  which is what the mesh and texture counts matching everywhere suggests
+- Pick the tyre matching the surface. Import always takes the tarmac one,
+  and never the *_dirt* variants
 
     QOL
 - Flip UVs for easy editing
