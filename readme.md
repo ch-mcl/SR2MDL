@@ -20,6 +20,11 @@ Blender collection and its Nodes have Custom Properties that store necessary dat
 - SR2MDL packs the data and saves it
 
 
+# Notes
+- `docs/課題.md` - the open issues
+- `docs/mdl_node_pointer_memo.md` - how a node's child and sibling offsets look
+
+
 # TODO
 - Refactor code
 

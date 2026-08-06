@@ -1,7 +1,2 @@
 _installer/
-
-# Game assets stay out, but the notes kept alongside them are tracked
-_sample/*
-!_sample/_human/
-_sample/_human/*
-!_sample/_human/*.md
+_sample/
