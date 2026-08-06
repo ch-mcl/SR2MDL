@@ -41,10 +41,16 @@ writes them back. The six floats of a material are still unidentified.
 - Keep the section order a mesh had in the file. Export always writes
   Material, Vertex, Face, while some files have Vertex first
 
+Import picks up the texture file sitting next to a model under the same name
+(tree_a.mdl and tree_a.txr) and wires each texture into the material of the
+mesh with the same index. Car models name their textures differently and are
+not covered yet.
+
     Textures
-- Auto load textures, if present
-- Auto flip the texture
+- Work out how a car model picks its body.*.tex and *_tire.tex files
 - Read level embedded textures
+- Work out whether a mesh really does just take the texture at its own index,
+  which is what the mesh and texture counts matching everywhere suggests
 
     QOL
 - Flip UVs for easy editing

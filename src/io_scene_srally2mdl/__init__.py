@@ -6,6 +6,7 @@ import mathutils
 from .SR2Tools import sr2mdl
 
 from bpy.props import (StringProperty,
+                       BoolProperty,
                        CollectionProperty,
                        FloatProperty,
                        FloatVectorProperty,
@@ -194,6 +195,11 @@ class ImportSR2MDL(bpy.types.Operator, ImportHelper):
 
     filter_glob: StringProperty(default=MDL_FILTER, options={'HIDDEN'})
 
+    load_textures: BoolProperty(
+        name="Load Textures",
+        description="Read the texture file sitting next to the model, if there is one",
+        default=True)
+
     # Lets a whole car folder be picked at once
     files: CollectionProperty(type=bpy.types.OperatorFileListElement,
                               options={'HIDDEN', 'SKIP_SAVE'})
@@ -211,7 +217,7 @@ class ImportSR2MDL(bpy.types.Operator, ImportHelper):
 
         for path in paths:
             try:
-                sr2mdl.load(path, global_matrix)
+                sr2mdl.load(path, global_matrix, self.load_textures)
             except Exception as exception:
                 self.report({'ERROR'}, "Could not import {}: {}".format(os.path.basename(path), exception))
                 return {'CANCELLED'}
