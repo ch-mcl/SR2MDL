@@ -14,7 +14,11 @@ from bpy.types import (Panel,
                        PropertyGroup,
                        )
 
-from bpy_extras.io_utils import ImportHelper, ExportHelper
+from bpy_extras.io_utils import (ImportHelper,
+                                 ExportHelper,
+                                 axis_conversion,
+                                 orientation_helper,
+                                 )
 
 bl_info = {
     "name": "Sega Rally 2 MDL importer/exporter",
@@ -27,6 +31,19 @@ bl_info = {
 }
 
 MDL_FILTER = "*.mdl;*.MDL"
+
+# A MDL is Y-up, Blender is Z-up. Reading one without converting leaves the
+# model lying on its back. These are the axes of the MDL, named the way
+# Blender's axis_conversion wants them, and they also flip X - not a mirror,
+# but the rotation that takes a Y-up model upright without turning its faces
+# inside out.
+DEFAULT_AXIS_FORWARD = '-Z'
+DEFAULT_AXIS_UP = 'Y'
+
+
+def defaultGlobalMatrix():
+    return axis_conversion(from_forward=DEFAULT_AXIS_FORWARD,
+                           from_up=DEFAULT_AXIS_UP).to_4x4()
 
 
 class SR2PanelProperties(PropertyGroup):
@@ -95,11 +112,12 @@ class LoadOperator(bpy.types.Operator):
         print("Load path", load_path)
 
         if load_path != "":
-            sr2mdl.load(load_path, mathutils.Matrix())
+            sr2mdl.load(load_path, defaultGlobalMatrix())
 
         return {'FINISHED'}
 
 
+@orientation_helper(axis_forward=DEFAULT_AXIS_FORWARD, axis_up=DEFAULT_AXIS_UP)
 class ImportSR2MDL(bpy.types.Operator, ImportHelper):
     """Import a Sega Rally 2 model"""
     bl_idname = "import_scene.sr2mdl"
@@ -122,9 +140,12 @@ class ImportSR2MDL(bpy.types.Operator, ImportHelper):
         else:
             paths = [self.filepath]
 
+        global_matrix = axis_conversion(from_forward=self.axis_forward,
+                                        from_up=self.axis_up).to_4x4()
+
         for path in paths:
             try:
-                sr2mdl.load(path, mathutils.Matrix())
+                sr2mdl.load(path, global_matrix)
             except Exception as exception:
                 self.report({'ERROR'}, "Could not import {}: {}".format(os.path.basename(path), exception))
                 return {'CANCELLED'}

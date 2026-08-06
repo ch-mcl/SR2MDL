@@ -1,5 +1,13 @@
 # Install
-When you install/run the script, a side panel will appear (where Item, Tool, View, etc are)
+Models can be loaded from File > Import > Sega Rally 2 Model (.mdl) and written
+back from File > Export. Several files can be picked at once when importing.
+Installing also adds a side panel (where Item, Tool, View, etc are) that loads a
+single file and writes every open model into a folder.
+
+MDL files are Y-up while Blender is Z-up, so import rotates the model upright.
+The Forward Axis / Up Axis options of the import dialog control that, and the
+choice is stored on the collection so export puts the model back the way the
+file had it.
 
 SR2MDL and relevant classes handle MDL file unpacking and packing.
 load and generate_mesh functions turn unpacked data into a Blender collection with nodes and meshes.
@@ -19,11 +27,11 @@ Blender collection and its Nodes have Custom Properties that store necessary dat
 ? Make Blender object heirarchy in the same way they are in node.relation? 
 
     Missing
-- Update Node Scale and Position when saving
 - Material representation?
-
-    Usability
-- Add import button to Blender import submenu
+- Write the extra 0x20 block that a mesh's Model Pointers "unk_0x18" points at
+  (the light meshes have one, and it is dropped on export)
+- Keep the section order a mesh had in the file. Export always writes
+  Material, Vertex, Face, while some files have Vertex first
 
     Textures
 - Auto load textures, if present
@@ -32,11 +40,8 @@ Blender collection and its Nodes have Custom Properties that store necessary dat
 
     QOL
 - Flip UVs for easy editing
-- Rotate entire model on load. Pivot at the world origin
-- Scale X axis of all parts by -1 to have correct texture display
-(Don't forget to undo the above while saving)
-
-- Load entire car folder
+- Work out what the light meshes mean by a Face Count of 1 with 4 vertices.
+  Import currently assumes a quad and writes 6 indices back
 
     Opening Levels
 - Figure out where to get offsets for the rest of the environment
