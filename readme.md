@@ -45,13 +45,14 @@ Import reads textures too. A node's transform holds a "Texture Index" at 0x0C,
 -1 when the mesh is drawn untextured, otherwise an index into the textures the
 model uses. A Track model keeps those in a file named after it (tree_a.mdl and
 tree_a.txr); a car indexes into the shared files of its folder, where 0 is
-body, 1 the tyre and 2 the windows, whose texture lives elsewhere.
+body and 1 the tyre, plus WINDOW.TXR from the EFFECT folder beside them for 2.
 
     Textures
-- Find where the window texture of a car lives
 - Read level embedded textures
 - Pick the tyre matching the surface. Import always takes the tarmac one,
   and never the *_dirt* variants
+- Draw the wind01..wind14 variants the game puts on a windscreen. Import
+  always takes the plain WINDOW
 
     QOL
 - Flip UVs for easy editing
