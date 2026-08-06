@@ -26,8 +26,11 @@ Blender collection and its Nodes have Custom Properties that store necessary dat
 ? Redo the way additional data is shared between Blender and SR2MDL and SR2Node
 ? Make Blender object heirarchy in the same way they are in node.relation? 
 
+A mesh's MDL material comes in as a Blender material. Its values sit under
+"SR2 MDL Material" in the Material tab, where they can be edited, and export
+writes them back. The six floats of a material are still unidentified.
+
     Missing
-- Material representation?
 - Write the extra 0x20 block that a mesh's Model Pointers "unk_0x18" points at
   (the light meshes have one, and it is dropped on export)
 - Keep the section order a mesh had in the file. Export always writes

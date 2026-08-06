@@ -7,6 +7,8 @@ from .SR2Tools import sr2mdl
 
 from bpy.props import (StringProperty,
                        CollectionProperty,
+                       FloatProperty,
+                       FloatVectorProperty,
                        PointerProperty,
                        )
 
@@ -44,6 +46,70 @@ DEFAULT_AXIS_UP = 'Y'
 def defaultGlobalMatrix():
     return axis_conversion(from_forward=DEFAULT_AXIS_FORWARD,
                            from_up=DEFAULT_AXIS_UP).to_4x4()
+
+
+class SR2MDLMaterialProperties(PropertyGroup):
+    """
+    A mesh's MDL material, kept on the Blender material it was imported as.
+
+    A MDL material is two RGBA colours stored as bytes, then six floats whose
+    meaning is not known yet. Over the sample files the first colour is the
+    only one that is usually not black, the second alpha is always 0, and
+    unk_0x14 and unk_0x1C are always 0.
+    """
+
+    color_0: FloatVectorProperty(
+        name="Color 0",
+        description="First material colour (R0, G0, B0, A0)",
+        subtype='COLOR_GAMMA',
+        size=4,
+        min=0.0, max=1.0,
+        default=(1.0, 1.0, 1.0, 1.0))
+
+    color_1: FloatVectorProperty(
+        name="Color 1",
+        description="Second material colour (R1, G1, B1, A1)",
+        subtype='COLOR_GAMMA',
+        size=4,
+        min=0.0, max=1.0,
+        default=(0.0, 0.0, 0.0, 0.0))
+
+    unk_0x08: FloatProperty(name="unk_0x08", description="Unknown. 0.7 to 3.0 in the sample files")
+    unk_0x0C: FloatProperty(name="unk_0x0C", description="Unknown. Mostly 0, 1, 2, 4 or 8")
+    unk_0x10: FloatProperty(name="unk_0x10", description="Unknown. Almost always 0")
+    unk_0x14: FloatProperty(name="unk_0x14", description="Unknown. Always 0 in the sample files")
+    unk_0x18: FloatProperty(name="unk_0x18", description="Unknown. 0 or 0.3")
+    unk_0x1C: FloatProperty(name="unk_0x1C", description="Unknown. Always 0 in the sample files")
+
+
+class SR2MDLMaterialPanel(Panel):
+    """Shows the MDL material values of the active material"""
+    bl_label = "SR2 MDL Material"
+    bl_idname = "MATERIAL_PT_sr2mdl"
+    bl_space_type = 'PROPERTIES'
+    bl_region_type = 'WINDOW'
+    bl_context = "material"
+
+    @classmethod
+    def poll(cls, context):
+        return context.material is not None
+
+    def draw(self, context):
+        layout = self.layout
+        material_properties = getattr(context.material, sr2mdl.MATERIAL_PROPERTY, None)
+
+        if material_properties is None:
+            layout.label(text="Not available", icon='ERROR')
+            return
+
+        layout.use_property_split = True
+
+        layout.prop(material_properties, "color_0")
+        layout.prop(material_properties, "color_1")
+
+        column = layout.column(align=True)
+        for key in sr2mdl.MATERIAL_FLOAT_KEYS:
+            column.prop(material_properties, key)
 
 
 class SR2PanelProperties(PropertyGroup):
@@ -226,12 +292,14 @@ def menu_func_export(self, context):
 
 # List of classes to register
 classes = (
+    SR2MDLMaterialProperties,
     SR2PanelProperties,
     SaveOperator,
     LoadOperator,
     ImportSR2MDL,
     ExportSR2MDL,
     SR2MDLSidebarPanel,
+    SR2MDLMaterialPanel,
 )
 
 
@@ -240,6 +308,8 @@ def register():
     for cls in classes:
         bpy.utils.register_class(cls)
     bpy.types.Scene.sr2_panel_props = bpy.props.PointerProperty(type=SR2PanelProperties)
+    setattr(bpy.types.Material, sr2mdl.MATERIAL_PROPERTY,
+            PointerProperty(type=SR2MDLMaterialProperties))
     bpy.types.TOPBAR_MT_file_import.append(menu_func_import)
     bpy.types.TOPBAR_MT_file_export.append(menu_func_export)
 
@@ -247,6 +317,7 @@ def register():
 def unregister():
     bpy.types.TOPBAR_MT_file_export.remove(menu_func_export)
     bpy.types.TOPBAR_MT_file_import.remove(menu_func_import)
+    delattr(bpy.types.Material, sr2mdl.MATERIAL_PROPERTY)
     for cls in reversed(classes):
         bpy.utils.unregister_class(cls)
     del bpy.types.Scene.sr2_panel_props
