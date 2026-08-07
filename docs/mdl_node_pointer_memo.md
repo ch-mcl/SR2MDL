@@ -36,3 +36,28 @@ I based 0x60 of Node is child.
 And 0x64 of Node is sibling.
 So no additional space with |- means sibling.(0x64 has valid pointer for node).
 Additional space with |- means child.(0x60 has valid pointer for node).
+
+---
+
+# Checked against the files
+
+The tree above is right. A node's relation holds the offset of its first child
+at 0x60 and of its next sibling at 0x64, and both cases reproduce exactly.
+
+Two labels in it are off, so reading it later does not send anyone the wrong
+way:
+
+- The two columns are **0x08 and 0x0C**, not 0x68 and 0x6C. They are the Node
+  Index and the Texture Index of the node transform. Every value listed for
+  l_corolla.mdl matches what is at those offsets.
+- **NodePointer[43] is Road[43]**. The road array starts at Relation Offset +
+  0x20, which puts entry 43 of DES_SS1.DAT at 0x1D4D00 + 43 * 0x60 = 0x1D5D20.
+  Its field at +0x04 is the road's "Node Offset", pointing at 0x14CE80.
+
+One transcription slip: the first node of the DES_SS1 chain has Node Index
+0x42, not 0x41. The rest of that table, including every Texture Index, is
+exactly what the file holds.
+
+Following the chain matters. A road points at the head of a sibling list, and
+reading only the head left most of a level behind - 120 of RIVIERA.DAT's 628
+nodes, 437 of DES_SS1.DAT's 902.

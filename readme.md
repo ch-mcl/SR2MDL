@@ -60,8 +60,9 @@ body and 1 the tyre, plus WINDOW.TXR from the EFFECT folder beside them for 2.
   Import currently assumes a quad and writes 6 indices back
 
     Opening Levels
-- Figure out where to get offsets for the rest of the environment
 - Figure out Road values meaning
-- Figure out Kinda Pointers values meaning
+- Figure out Kinda Pointers values meaning. They do not look like the array of
+  eight pointers they are read as
 - Figure out what Node Indexes array is for
-- Figure out how to parse Nodes with 0xFFFFFFFF
+- Write a level back out. Export does not know about roads or anything else
+  that only a level has
