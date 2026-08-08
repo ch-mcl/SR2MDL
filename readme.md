@@ -40,11 +40,19 @@ A mesh's MDL material comes in as a Blender material. Its values sit under
 "SR2 MDL Material" in the Material tab, where they can be edited, and export
 writes them back. The six floats of a material are still unidentified.
 
+A mesh can carry a 0x20 block between its faces and its Model Pointers, whose
+"unk_0x18" holds the offset. Only the four-vertex light billboards of a car
+have one - 73 of the 3810 meshes in the sample files - and all 73 hold the same
+eight floats, 0.0 and 1.0 four times over. What they mean is open, so import
+keeps the bytes on the object under "Model Extra Block" and export puts them
+back where they were.
+
     Missing
-- Write the extra 0x20 block that a mesh's Model Pointers "unk_0x18" points at
-  (the light meshes have one, and it is dropped on export)
 - Keep the section order a mesh had in the file. Export always writes
-  Material, Vertex, Face, while some files have Vertex first
+  Material, Vertex, Face, while 54 of the 134 sample models have Vertex first.
+  The node array comes out right either way, but the file is not byte-identical
+- A UV V-coordinate can come back one ULP off, because import flips it with
+  -(v - 1.0) and export flips it back. 60 more of the 134 differ only in that
 
 Import reads textures too. A node's transform holds a "Texture Index" at 0x0C,
 -1 when the mesh is drawn untextured, otherwise an index into the textures the
