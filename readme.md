@@ -9,6 +9,12 @@ The Forward Axis / Up Axis options of the import dialog control that, and the
 choice is stored on the collection so export puts the model back the way the
 file had it.
 
+Import parents the objects the way the file does. A node's relation names its
+first child and its next sibling, and the game draws a child through its
+parent's transform, so moving a parent in Blender moves what hangs off it. A
+child's transform is parent-relative in the file and in Blender alike, which is
+why the axis conversion above sits on the root objects only.
+
 SR2MDL and relevant classes handle MDL file unpacking and packing.
 load and generate_mesh functions turn unpacked data into a Blender collection with nodes and meshes.
 Blender collection and its Nodes have Custom Properties that store necessary data.
@@ -29,7 +35,6 @@ Blender collection and its Nodes have Custom Properties that store necessary dat
 - Refactor code
 
 ? Redo the way additional data is shared between Blender and SR2MDL and SR2Node
-? Make Blender object heirarchy in the same way they are in node.relation? 
 
 A mesh's MDL material comes in as a Blender material. Its values sit under
 "SR2 MDL Material" in the Material tab, where they can be edited, and export

@@ -61,3 +61,35 @@ exactly what the file holds.
 Following the chain matters. A road points at the head of a sibling list, and
 reading only the head left most of a level behind - 120 of RIVIERA.DAT's 628
 nodes, 437 of DES_SS1.DAT's 902.
+
+# Which of the two is the child
+
+Checked again against DES_SS1/cp_4.mdl, where the game settles it. The file
+holds two nodes:
+
+```
+node_0000 @0x0DE0  pos(-594.994, -6.856, 599.512)  rot Y 0x7855
+    relation 0x00 = 0x0D60   0x04 = 0
+node_0001 @0x0D60  pos(0, 0, 0)                    rot 0
+    relation 0x00 = 0        0x04 = 0
+```
+
+node_0001 is stored at the origin, and in game it stands exactly where
+node_0000 stands, at the same angle, and follows node_0000 when that is moved.
+Only a child does that, so 0x00 is the child. A sibling would have kept its own
+place, which for node_0001 would be the world origin - 845 units away.
+
+The shape of the two edges across the sample files says the same thing:
+
+- No node is ever the target of two edges of either kind, in any of the 140
+  sample files. Both are single links, as a first-child / next-sibling tree
+  wants.
+- A car is one root with a flat row under it. r_corolla.mdl: node_0000 (the
+  body) --0x00--> node_0001, then node_0001..node_0009 --0x04--> each other,
+  and node_0009 --0x00--> node_0010. Two 0x00 edges, eight 0x04 edges, eleven
+  nodes, one root. The wheels sit at +/-0.71 either side of a body that is at
+  the origin, which is body-relative and matches.
+- A level has no 0x00 edge at all. DES_SS1/MNT_SS2/RIVIERA/SNW_SS3 are pure
+  0x04 chains of scenery, every node at position (0,0,0) with its vertices in
+  world coordinates. Nothing there inherits anything, which is what a row of
+  siblings should look like.
