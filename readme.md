@@ -67,10 +67,19 @@ body and 1 the tyre, plus WINDOW.TXR from the EFFECT folder beside them for 2.
 - Draw the wind01..wind14 variants the game puts on a windscreen. Import
   always takes the plain WINDOW
 
+A mesh whose faces the user did not touch is written back byte for byte,
+because not every mesh stores them the way this tool writes them. "Face Count"
+is an index count for the usual mesh, always a multiple of three. 98 meshes of
+the sample files hold 1 instead - every one of them a four-vertex billboard, a
+car's lights among them - and their face region is four 32-bit indices, 3, 2,
+1, 0 or 1, 0, 3, 2, sometimes followed by a 1.0 or -1.0. Writing those back as
+six 16-bit indices with a Face Count of 6 froze the game.
+
     QOL
 - Flip UVs for easy editing
-- Work out what the light meshes mean by a Face Count of 1 with 4 vertices.
-  Import currently assumes a quad and writes 6 indices back
+- Work out what picks one face encoding over the other, so a Face Count of 1
+  mesh can be edited too. Editing one now regenerates it as triangles, which
+  is the form that froze the game
 
     Opening Levels
 - Figure out Road values meaning
