@@ -47,12 +47,21 @@ eight floats, 0.0 and 1.0 four times over. What they mean is open, so import
 keeps the bytes on the object under "Model Extra Block" and export puts them
 back where they were.
 
-    Missing
+A round trip of a whole car folder has been driven in game and behaves. That
+settles two of the differences below as cosmetic: the game reads a mesh through
+the offsets in its Model Pointers, so the order the sections sit in does not
+reach it, and neither does a UV that is off by a sign bit or an ULP.
+
+    Byte-identity, not correctness
 - Keep the section order a mesh had in the file. Export always writes
-  Material, Vertex, Face, while 54 of the 134 sample models have Vertex first.
-  The node array comes out right either way, but the file is not byte-identical
-- A UV V-coordinate can come back one ULP off, because import flips it with
-  -(v - 1.0) and export flips it back. 60 more of the 134 differ only in that
+  Material, Vertex, Face, while 54 of the 136 sample models have Vertex first
+- A UV V-coordinate can come back as -0.0, or one ULP off, because import flips
+  it with -(v - 1.0) and export flips it back. 54 more differ only in that
+
+    Missing
+- Work out why the normals of tree_a..tree_f and Char/A.MDL, Char/Z.MDL do not
+  survive a round trip. The other 128 sample models keep theirs. Not covered by
+  the in-game check, which used a car folder
 
 Import reads textures too. A node's transform holds a "Texture Index" at 0x0C,
 -1 when the mesh is drawn untextured, otherwise an index into the textures the
