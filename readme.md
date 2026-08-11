@@ -56,12 +56,16 @@ reach it, and neither does a UV that is off by a sign bit or an ULP.
 - Keep the section order a mesh had in the file. Export always writes
   Material, Vertex, Face, while 54 of the 136 sample models have Vertex first
 - A UV V-coordinate can come back as -0.0, or one ULP off, because import flips
-  it with -(v - 1.0) and export flips it back. 54 more differ only in that
+  it with -(v - 1.0) and export flips it back. 231 of the 329 sample meshes
+  differ in this and nothing else - it is the last thing between an untouched
+  round trip and identical vertex data
 
-    Missing
-- Work out why the normals of tree_a..tree_f and Char/A.MDL, Char/Z.MDL do not
-  survive a round trip. The other 128 sample models keep theirs. Not covered by
-  the in-game check, which used a car folder
+A normal that Blender cannot hold goes back exactly as it was read. Blender
+normalizes a custom normal, so a zero-length one comes back as whatever the
+faces say and a non-finite one comes back as a default - the value in the file
+never reaches the user, so it cannot have been edited either. tree_a.mdl
+through tree_f.mdl zero four normals each, and Char/A.MDL and Char/Z.MDL store
+0, NaN, 0 for every vertex, NaN payload and all.
 
 Import reads textures too. A node's transform holds a "Texture Index" at 0x0C,
 -1 when the mesh is drawn untextured, otherwise an index into the textures the
