@@ -52,13 +52,22 @@ settles two of the differences below as cosmetic: the game reads a mesh through
 the offsets in its Model Pointers, so the order the sections sit in does not
 reach it, and neither does a UV that is off by a sign bit or an ULP.
 
+A UV that was not edited goes back as it was read, the same way a normal does.
+Import flips V and export flips it back, which is exact on paper but not in
+single precision: a V of 0.0 returned as -0.0, and the rounding could move the
+last bit besides.
+
+A MDL keeps one UV per vertex while Blender keeps one per corner, so a UV edit
+only reaches the file if every corner sharing that vertex is given the same
+value. Export takes the last corner it sees otherwise.
+
     Byte-identity, not correctness
 - Keep the section order a mesh had in the file. Export always writes
   Material, Vertex, Face, while 54 of the 136 sample models have Vertex first
-- A UV V-coordinate can come back as -0.0, or one ULP off, because import flips
-  it with -(v - 1.0) and export flips it back. 231 of the 329 sample meshes
-  differ in this and nothing else - it is the last thing between an untouched
-  round trip and identical vertex data
+- 28 UV coordinates, spread over four KEROLLA light models, hold a signalling
+  NaN. Reading one into a Python float quiets it, which no amount of storing
+  can undo - it would take carrying raw words through the whole vertex path.
+  The value stays a NaN either way, in the U of an untextured billboard
 
 A normal that Blender cannot hold goes back exactly as it was read. Blender
 normalizes a custom normal, so a zero-length one comes back as whatever the
