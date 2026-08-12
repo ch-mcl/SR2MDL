@@ -100,6 +100,9 @@ Import flags such a mesh with a "Fixed Face Data" custom property, and export
 writes its face bytes from the file instead of from the Blender mesh for as
 long as that is set. Editing one is therefore safe: move its vertices, change
 its UVs, even add geometry, and the encoding the game expects still comes out.
+Both have been driven in game - a car's lights scaled to twice their size, and
+the same again with a vertex added, which the game takes in its stride because
+nothing references it.
 The flag sits in the object's Custom Properties, so it can be cleared to hand
 the mesh back to the usual triangle path, or set on a mesh built in Blender to
 have it written as a billboard - one with no bytes of its own falls back to a
