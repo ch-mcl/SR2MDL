@@ -113,10 +113,22 @@ single face of 3, 2, 1, 0.
 - Work out what picks one face encoding over the other. Until then a mesh can
   only be moved between the two by hand, through the "Fixed Face Data" flag
 
+A level's node index array turned out to be one slice of road indexes per
+road, the road saying where its slice starts and how long it is. A slice holds
+other roads, never itself, never a duplicate, always ascending - the set of
+road segments that matter while driving this one. How many there are tracks how
+far one can see: RIVIERA averages 2.6, the desert of DES_SS1 15.2.
+
+The header field counts indexes, not bytes. Reading it as a size took a quarter
+of the array and started every section behind it mid-array, which is why the
+kinda pointers looked like nothing in particular.
+
     Opening Levels
-- Figure out Road values meaning
-- Figure out Kinda Pointers values meaning. They do not look like the array of
-  eight pointers they are read as
-- Figure out what Node Indexes array is for
+- Figure out the rest of the Road values. A road has 24 of them and two more
+  are now known: where its slice of the node index array starts and how long
+- Figure out Kinda Pointers values meaning. With the node index array read at
+  its real length they start where they should, and RIVIERA's count times 32
+  accounts for its remaining bytes exactly - DES_SS1 has more left over than
+  that, so something else follows them there
 - Write a level back out. Export does not know about roads or anything else
   that only a level has
