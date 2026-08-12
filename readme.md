@@ -89,19 +89,26 @@ body and 1 the tyre, plus WINDOW.TXR from the EFFECT folder beside them for 2.
 - Draw the wind01..wind14 variants the game puts on a windscreen. Import
   always takes the plain WINDOW
 
-A mesh whose faces the user did not touch is written back byte for byte,
-because not every mesh stores them the way this tool writes them. "Face Count"
-is an index count for the usual mesh, always a multiple of three. 98 meshes of
-the sample files hold 1 instead - every one of them a four-vertex billboard, a
+Not every mesh stores its faces the way this tool writes them. "Face Count" is
+an index count for the usual mesh, always a multiple of three. 98 meshes of the
+sample files hold 1 instead - every one of them a four-vertex billboard, a
 car's lights among them - and their face region is four 32-bit indices, 3, 2,
 1, 0 or 1, 0, 3, 2, sometimes followed by a 1.0 or -1.0. Writing those back as
 six 16-bit indices with a Face Count of 6 froze the game.
 
+Import flags such a mesh with a "Fixed Face Data" custom property, and export
+writes its face bytes from the file instead of from the Blender mesh for as
+long as that is set. Editing one is therefore safe: move its vertices, change
+its UVs, even add geometry, and the encoding the game expects still comes out.
+The flag sits in the object's Custom Properties, so it can be cleared to hand
+the mesh back to the usual triangle path, or set on a mesh built in Blender to
+have it written as a billboard - one with no bytes of its own falls back to a
+single face of 3, 2, 1, 0.
+
     QOL
 - Flip UVs for easy editing
-- Work out what picks one face encoding over the other, so a Face Count of 1
-  mesh can be edited too. Editing one now regenerates it as triangles, which
-  is the form that froze the game
+- Work out what picks one face encoding over the other. Until then a mesh can
+  only be moved between the two by hand, through the "Fixed Face Data" flag
 
     Opening Levels
 - Figure out Road values meaning
