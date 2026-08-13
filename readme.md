@@ -123,6 +123,13 @@ The header field counts indexes, not bytes. Reading it as a size took a quarter
 of the array and started every section behind it mid-array, which is why the
 kinda pointers looked like nothing in particular.
 
+"Split Track Into Roads" in the import dialog puts a level's objects into one
+collection per road rather than one flat list of a thousand. A road holds the
+scenery on its stretch of track, and a piece standing on more than one is
+linked into each - 468 of DES_SS1's 902 nodes are. The visible set stays a
+relationship between collections rather than something copied into them. Off by
+default, and a plain model has no roads to split.
+
     Opening Levels
 - Figure out the rest of the Road values. A road has 24 of them and two more
   are now known: where its slice of the node index array starts and how long

@@ -200,6 +200,14 @@ class ImportSR2MDL(bpy.types.Operator, ImportHelper):
         description="Read the texture file sitting next to the model, if there is one",
         default=True)
 
+    group_by_road: BoolProperty(
+        name="Split Track Into Roads",
+        description="Put a track's objects into one collection per road instead of one flat "
+                    "list. A road holds the scenery on its stretch of track, and a piece "
+                    "standing on more than one appears in each. Plain models have no roads "
+                    "and come in unchanged",
+        default=False)
+
     # Lets a whole car folder be picked at once
     files: CollectionProperty(type=bpy.types.OperatorFileListElement,
                               options={'HIDDEN', 'SKIP_SAVE'})
@@ -217,7 +225,7 @@ class ImportSR2MDL(bpy.types.Operator, ImportHelper):
 
         for path in paths:
             try:
-                sr2mdl.load(path, global_matrix, self.load_textures)
+                sr2mdl.load(path, global_matrix, self.load_textures, self.group_by_road)
             except Exception as exception:
                 self.report({'ERROR'}, "Could not import {}: {}".format(os.path.basename(path), exception))
                 return {'CANCELLED'}
