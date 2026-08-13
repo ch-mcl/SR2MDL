@@ -130,12 +130,24 @@ linked into each - 468 of DES_SS1's 902 nodes are. The visible set stays a
 relationship between collections rather than something copied into them. Off by
 default, and a plain model has no roads to split.
 
+What was read as "kinda pointers" is one 0x20 record per triangle of a level,
+each naming the three triangles beside it. The name came from a guess that had
+the first two fields right: 0x00 is a mesh's vertex array and 0x04 the offset
+of this triangle's three 16-bit indices within that mesh's faces, stepping by 6
+through a group. 0x08, 0x0C and 0x10 index back into the array itself, and the
+links point both ways in 173,032 of the 173,040 across the four levels. Record
+0 is all zeros and means "no neighbour".
+
     Opening Levels
 - Figure out the rest of the Road values. A road has 24 of them and two more
   are now known: where its slice of the node index array starts and how long
-- Figure out Kinda Pointers values meaning. With the node index array read at
-  its real length they start where they should, and RIVIERA's count times 32
-  accounts for its remaining bytes exactly - DES_SS1 has more left over than
-  that, so something else follows them there
+- Figure out the triangle link flags at 0x18. Their top bit splits the records
+  into two pools that share no geometry, and every record in that pool has 0x1C
+  exactly 1.0
+- Figure out 0x1C of a triangle link. It is a float no greater than 1.0, and
+  for RIVIERA it is the absolute Y of the triangle's normal in 4195 of the 5177
+  records that could be checked, to a median of 0.00002. The same test mostly
+  misses on the other three, so where they read their vertices from is not
+  pinned down
 - Write a level back out. Export does not know about roads or anything else
   that only a level has
