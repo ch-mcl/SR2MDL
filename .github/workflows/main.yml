@@ -13,7 +13,7 @@ jobs:
         type: 'zip'
         filename: 'io_scene_srally2mdl.zip'
         directory: 'src'
-        exclusions: '*.git* *SR2Tools/Documentation* *SR2Tools/GUIbackend* *Changelog.txt *GUI_Run.py *README.md *SARCextractor.py *conversion.py *bin_files_tool.py *bmp_handler.py *bmp_png_conversion.py *color_conversion.py *exe_dll_patcher.py *texture_classes.py *texture_tool.py *unyakuza.py'
+        exclusions: '*.git* *SR2Tools/Documentation* *SR2Tools/GUIbackend* *Changelog.txt *GUI_Run.py *README.md *SARCextractor.py *conversion.py *bin_files_tool.py *bmp_png_conversion.py *exe_dll_patcher.py *texture_tool.py'
     - name: Upload
       uses: actions/upload-artifact@v7
       with:
